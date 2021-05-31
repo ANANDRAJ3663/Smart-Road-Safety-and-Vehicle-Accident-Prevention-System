@@ -1,0 +1,1 @@
+With increasing number of vehicles day by day, there are a greater number of accident’s happening which puts life at risk for many people out there. So, to tackle this problem we have come up with “Smart Road Safety and Vehicle Accident Prevention System” which is based upon ultrasonic sensor to detect the distance of danger and alerting the driver before any mishap happens.
