@@ -1,0 +1,72 @@
+#include <LiquidCrystal.h>  
+#define trig 10
+#define echo 9 
+long duration;  
+float dist;
+const int RS=12, EN=11, D4=5, D5=4, D6=3, D7=2; // LCD Pins used 
+LiquidCrystal lcd(RS,EN,D4,D5,D6,D7);   
+void setup()
+{	lcd.begin(16,2); // used 16x2 LCD 
+ 	pinMode(trig,OUTPUT);  
+ 	pinMode(echo,INPUT);
+ 	Serial.begin(9600);
+ 	pinMode(13,OUTPUT);// GREEN LED
+ 	pinMode(8,OUTPUT);//YELLOW LED
+ 	pinMode(7,OUTPUT);  // RED LEDS
+ 	pinMode(14,OUTPUT); // BUZZER
+ }
+void loop()
+{
+digitalWrite(trig,HIGH); 
+  	delay(200);
+  	digitalWrite(trig,LOW);
+  	duration = pulseIn(echo,HIGH);
+  	delay(100);
+  	dist = duration*0.034/2;  // calcluting distance
+ 	Serial.print("distance= ");
+ 	Serial.print(dist);   // display distace in serial monitor 
+ 	Serial.println(" cm");
+ 	if(dist<=330.00&&dist>=240)
+  	{ 
+    		digitalWrite(13,HIGH); // turn on Green LED
+       		digitalWrite(8,LOW);  // turn off Yellow LED
+  		digitalWrite(7,LOW); // turn off Red LED
+        		lcd.setCursor(1,0);
+ 		lcd.print("-NO DANGER-"); // display LCD message on screen
+ 		lcd.setCursor(0,1); 
+ 		lcd.print("MAINTAIN PACE"); // display LCD message on screen
+ 		delay(2000);
+ 		lcd.clear();  // clears LCD previous messages   
+  	}
+  else if(dist<240&&dist>=170) 
+  { 
+  	digitalWrite(8,HIGH);
+  	digitalWrite(13,LOW);
+  	digitalWrite(7,LOW);
+  	tone(14,500,300);
+  	delay(100); 
+ 	lcd.setCursor(1,0);
+ 	lcd.print("-DANGER AHEAD-");
+    	lcd.setCursor(0,1);
+lcd.print("SLOW YOUR SPEED");
+   	delay(2000);
+   	lcd.clear();
+    }
+  else
+  {  
+lcd.setCursor(0,0);
+lcd.print("-EXTREME DANGER-");
+   	lcd.setCursor(3,1);
+   	lcd.print("APPLY BRAKES");
+digitalWrite(7,HIGH);
+digitalWrite(8,LOW);
+    	tone(14,500,300); // producing sound having 500Hz frequency
+   	delay(100);
+    	tone(14,1000,800);// producing sound having 1000Hz frequency
+delay(100);
+  	tone(14,2000,1500);//producing sound having 1000Hz frequency
+  	delay(100);
+    	delay(1000);
+    	lcd.clear();
+       }
+}
